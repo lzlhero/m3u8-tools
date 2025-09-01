@@ -5,8 +5,8 @@ const { readFile, writeFile } = require('fs/promises');
   // get input file and base url
   var indexM3U8 = process.argv[2];
   var baseUrl = process.argv[3];
-  if (!indexM3U8 || !baseUrl) {
-    console.log(`Usage: url-m3u8 index.m3u8 "url-of-index-m3u8"`);
+  if (!indexM3U8) {
+    console.log(`Usage: url-m3u8 index.m3u8 [index-m3u8-url-string]`);
     return;
   }
 
@@ -22,7 +22,7 @@ const { readFile, writeFile } = require('fs/promises');
   var urlLines = [], fileLines = [], url;
   for (var i = 0; i < lines.length; i++) {
     if (lines[i].trim().length > 0 && !lines[i].startsWith('#')) {
-      url = new URL(lines[i], baseUrl);
+      url = baseUrl ? new URL(lines[i], baseUrl) : new URL(lines[i]);
       // get absolute url
       urlLines.push(url.href);
       // get local filename

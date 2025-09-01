@@ -68,7 +68,5 @@ const { readFile, writeFile } = require('fs/promises');
     console.error(`Write "${fixedM3U8}" failed.`);
     process.exit(1);
   }
-
   console.log(`Write "${fixedM3U8}" file.`);
-
 })();

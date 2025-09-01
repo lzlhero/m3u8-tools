@@ -18,6 +18,7 @@ const { readFile, writeFile } = require('fs/promises');
     process.exit(1);
   }
 
+  // parsing and transforming TS url
   var lines = content.split(/\r?\n/);
   var urlLines = [], fileLines = [], url;
   for (var i = 0; i < lines.length; i++) {
@@ -42,7 +43,6 @@ const { readFile, writeFile } = require('fs/promises');
     process.exit(1);
   }
   console.log(`Write "${urlM3U8}" file.`);
-
 
   // save file.m3u8 content.
   var fileM3U8 = 'file.m3u8';

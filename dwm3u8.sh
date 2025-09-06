@@ -5,6 +5,10 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-wget -q -O index.m3u8 "$1"
+wget -q -c -O index.m3u8 "$1"
 
 "$(dirname "$0")/urlm3u8.sh" index.m3u8 "$1"
+
+if [ -f "key.txt" ]; then
+  wget -q -c -i key.txt
+fi

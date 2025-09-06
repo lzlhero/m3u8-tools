@@ -34,6 +34,24 @@ const { readFile, writeFile } = require('fs/promises');
     }
   }
 
+  // get key url
+  var tsKeys = {};
+  var fileContent = fileLines.join('\n').replace(/(?:URI=")([^"]+)(?:")/g, function($0, tsKey) {
+    url = baseUrl ? new URL(tsKey, baseUrl) : new URL(tsKey);
+    tsKeys[url] = null;
+    return `URI="${url.pathname.split('/').pop()}"`;
+  });
+
+  // save key.txt content.
+  var keyFile = 'key.txt';
+  try {
+    await writeFile(keyFile, Object.keys(tsKeys).join('\n'), 'utf8');
+  } catch (error) {
+    console.error(`Write "${keyFile}" failed.`);
+    process.exit(1);
+  }
+  console.log(`Write "${keyFile}" file.`);
+
   // save url.m3u8 content.
   var urlM3U8 = 'url.m3u8';
   try {
@@ -47,7 +65,7 @@ const { readFile, writeFile } = require('fs/promises');
   // save file.m3u8 content.
   var fileM3U8 = 'file.m3u8';
   try {
-    await writeFile(fileM3U8, fileLines.join('\n'), 'utf8');
+    await writeFile(fileM3U8, fileContent, 'utf8');
   } catch (error) {
     console.error(`Write "${fileM3U8}" failed.`);
     process.exit(1);

@@ -5,6 +5,10 @@ if "%~1"=="" (
   exit /b 1
 )
 
-wget -q -O index.m3u8 "%~1"
+wget -q -c -O index.m3u8 "%~1"
 
 call "%~dp0urlm3u8.bat" index.m3u8 "%~1"
+
+if exist "key.txt" (
+  wget -q -i -c key.txt
+)

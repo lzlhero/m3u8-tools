@@ -15,4 +15,3 @@ for F in $1; do
   dd if="$F" of="${F%.*}.tmp" bs="$2" skip=1 status=none
   mv -f "${F%.*}.tmp" "$F"
 done
-

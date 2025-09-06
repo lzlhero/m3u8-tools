@@ -6,7 +6,7 @@ const { readFile, writeFile } = require('fs/promises');
   var indexM3U8 = process.argv[2];
   var baseUrl = process.argv[3];
   if (!indexM3U8) {
-    console.log(`Usage: url-m3u8 index.m3u8 [index-m3u8-url-string]`);
+    console.log(`Usage: urlm3u8 index.m3u8 [index-m3u8-url]`);
     return;
   }
 

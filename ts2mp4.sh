@@ -18,8 +18,7 @@ fi
 
 ffmpeg -allowed_extensions ALL -protocol_whitelist "file,http,https,tls,tcp,crypto" -i "$1" -c copy -f null /dev/null > ffmpeg.1.log 2>&1
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-"$SCRIPT_DIR/fix-m3u8.sh" "$1" ffmpeg.1.log
+"$(dirname "$0")/fixm3u8.sh" "$1" ffmpeg.1.log
 
 input="$1"
 if [ -f "fixed.m3u8" ]; then
@@ -27,3 +26,5 @@ if [ -f "fixed.m3u8" ]; then
 fi
 
 ffmpeg -y -allowed_extensions ALL -protocol_whitelist "file,http,https,tls,tcp,crypto" -i "$input" -c copy "$output" > ffmpeg.2.log 2>&1
+
+echo "Write \"$output\" file."

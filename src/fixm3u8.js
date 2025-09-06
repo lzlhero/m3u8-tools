@@ -6,7 +6,7 @@ const { readFile, writeFile } = require('fs/promises');
   var fileM3U8 = process.argv[2];
   var ffmpegLog = process.argv[3];
   if (!fileM3U8 || !ffmpegLog) {
-    console.log(`Usage: fix-m3u8 file.m3u8 ffmpeg.log`);
+    console.log(`Usage: fixm3u8 file.m3u8 ffmpeg.log`);
     return;
   }
 

@@ -37,7 +37,7 @@ const { readFile, writeFile } = require('fs/promises');
   // get key url
   var tsKeys = {};
   var fileContent = fileLines.join('\n').replace(/(?:URI=")([^"]+)(?:")/g, function($0, tsKey) {
-    url = baseUrl ? new URL(tsKey, baseUrl) : new URL(tsKey);
+    var url = baseUrl ? new URL(tsKey, baseUrl) : new URL(tsKey);
     tsKeys[url] = null;
     return `URI="${url.pathname.split('/').pop()}"`;
   });

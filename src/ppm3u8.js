@@ -18,6 +18,12 @@ const { readFile, writeFile } = require('fs/promises');
     process.exit(1);
   }
 
+  // find discontinuity comments
+  var discontinuity = content.match(/DISCONTINUITY/ig);
+  if (discontinuity) {
+    console.log(`Discontinuity comments number: ${discontinuity.length}`);
+  }
+
   // parsing and transforming TS url
   var lines = content.split(/\r?\n/);
   var urlObject, urlSections, urlFilename, urlPathname, referPathname;

@@ -18,12 +18,12 @@ const { readFile, writeFile } = require('fs/promises');
     process.exit(1);
   }
 
-  // find discontinuity comments
+  // discontinuity info
   var discontinuity = content.match(/DISCONTINUITY/ig);
   if (discontinuity) {
-    console.log(`Number of discontinuity comments: ${discontinuity.length}`);
+    console.log(`Found ${discontinuity.length} discontinuity in "${indexM3U8}".`);
   } else {
-    console.log('No discontinuity comments found.');
+    console.log(`No discontinuity found in "${indexM3U8}".`);
   }
 
   // parsing and transforming TS url

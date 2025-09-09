@@ -36,14 +36,15 @@ const { readFile, writeFile } = require('fs/promises');
     i++;
   }
 
-  // no discontinuity found
-  if (segment.length === 0) {
-    console.log('No discontinuity found.');
+  // discontinuity info
+  if (segment.length) {
+    console.log(`Found ${segment.length} discontinuity in "${ffmpegLog}".`);
+  } else {
+    console.log(`No discontinuity found in "${ffmpegLog}".`);
     return;
   }
 
   // remove advertisement segments from m3u8 content
-  console.log(`Found ${segment.length} 'discontinuity'.`);
   var strReg, reg;
   for (var i = 0; i < segment.length; i = i + 2) {
     // build reg string

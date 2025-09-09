@@ -21,7 +21,9 @@ const { readFile, writeFile } = require('fs/promises');
   // find discontinuity comments
   var discontinuity = content.match(/DISCONTINUITY/ig);
   if (discontinuity) {
-    console.log(`Discontinuity comments number: ${discontinuity.length}`);
+    console.log(`Number of discontinuity comments: ${discontinuity.length}`);
+  } else {
+    console.log('No discontinuity comments found.');
   }
 
   // parsing and transforming TS url

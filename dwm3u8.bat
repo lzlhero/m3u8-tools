@@ -7,4 +7,7 @@ if "%~1"=="" (
 
 wget -q -c -O index.m3u8 "%~1"
 
-call "%~dp0ppm3u8.bat" index.m3u8 "%~1"
+set "temp=m3u8-url.temp"
+echo %~1 > %temp%
+call "%~dp0ppm3u8.bat" index.m3u8 %temp%
+del /f /q %temp%

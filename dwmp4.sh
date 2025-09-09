@@ -11,4 +11,4 @@ wget -q -c -O index.m3u8 "$1"
 
 dw -i url.m3u8
 
-"$(dirname "$0")/t2m.sh" file.m3u8 "$2"
+"$(dirname "$0")/ts2mp4.sh" file.m3u8 "$2"

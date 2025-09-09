@@ -14,4 +14,4 @@ del /f /q %temp%
 
 call dw -i url.m3u8
 
-call "%~dp0t2m.bat" file.m3u8 "%~2"
+call "%~dp0ts2mp4.bat" file.m3u8 "%~2"

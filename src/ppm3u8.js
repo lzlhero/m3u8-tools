@@ -50,7 +50,6 @@ const { readFile, writeFile } = require('fs/promises');
       }
     } else {
       // save comments
-      urlLines.push(lines[i]);
       fileLines.push(lines[i]);
     }
   }
@@ -76,15 +75,15 @@ const { readFile, writeFile } = require('fs/promises');
     console.log(`Write "${keyFile}" file.`);
   }
 
-  // save url.m3u8 content
-  var urlM3U8 = 'url.m3u8';
+  // save TS url content
+  var urlFile = 'ts.txt';
   try {
-    await writeFile(urlM3U8, urlLines.join('\n'), 'utf8');
+    await writeFile(urlFile, urlLines.join('\n'), 'utf8');
   } catch (error) {
-    console.error(`Write "${urlM3U8}" failed.`);
+    console.error(`Write "${urlFile}" failed.`);
     process.exit(1);
   }
-  console.log(`Write "${urlM3U8}" file.`);
+  console.log(`Write "${urlFile}" file.`);
 
   // save file.m3u8 content
   var fileM3U8 = 'file.m3u8';

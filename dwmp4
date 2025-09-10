@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# display usage information
+if [ -z "$1" ]; then
+  echo "Usage: $(basename "$0") m3u8-url [output.mp4]"
+  exit 1
+fi
+
+# set mp4 output filename
+if [ -z "$2" ]; then
+  output="output.mp4"
+else
+  output="$2"
+fi
+while [[ "$output" == *"." ]]; do
+  output="${output%.}"
+done
+ext="${output: -4}"
+if [[ "${ext,,}" != ".mp4" ]]; then
+  output="$output.mp4"
+fi
+
+# download m3u8 file
+wget -q -c -O index.m3u8 "$1"
+
+# generate key.txt, ts.txt, file.m3u8 by index.m3u8
+node "$(dirname "$0")/src/ppm3u8.js" index.m3u8 "$1"
+
+# download key file by key.txt
+if [ -f key.txt ]; then
+  wget -q -c -i key.txt
+fi
+
+# download ts files by ts.txt
+dw -i ts.txt
+
+# set m3u8 input filename
+input="file.m3u8"
+
+# generate ffmpeg checking log
+ffmpeg -allowed_extensions ALL -protocol_whitelist file -i "$input" -c copy -f null /dev/null > ffmpeg.1.log 2>&1
+
+# genertate fixed.m3u8 by ffmpeg.1.log
+node "$(dirname "$0")/src/fixm3u8.js" "$input" ffmpeg.1.log
+
+# change m3u8 input filename
+if [ -f fixed.m3u8 ]; then
+  input="fixed.m3u8"
+fi
+
+# merge all ts files to mp4 file
+ffmpeg -y -allowed_extensions ALL -protocol_whitelist file -i "$input" -c copy "$output" > ffmpeg.2.log 2>&1
+
+# display mp4 filename
+if [ -f "$output" ]; then
+  echo "Write \"$output\" file."
+fi

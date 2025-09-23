@@ -36,6 +36,11 @@ if exist "key.txt" (
 :: download ts files by ts.txt
 call dw -i ts.txt
 
+:: prompt user to stop
+echo.
+echo Merge all ts files to "%output%" file? (Ctrl+c to stop)
+pause
+
 :: set m3u8 input filename
 set "input=file.m3u8"
 

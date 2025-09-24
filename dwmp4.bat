@@ -38,8 +38,9 @@ call dw -i ts.txt
 
 :: prompt user to stop
 echo.
-echo Merge all ts files to "%output%" file? Press Ctrl+C to exit.
-pause
+echo Merge all ts files to "%output%" file?
+echo Press any key to continue (Ctrl+C to exit)...
+pause >nul
 
 :: set m3u8 input filename
 set "input=file.m3u8"

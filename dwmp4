@@ -37,7 +37,8 @@ dw -i ts.txt
 # prompt user to stop
 echo
 echo "Merge all ts files to \"$output\" file? Press Ctrl+C to exit."
-read -r -p "Press Enter to continue..."
+read -n 1 -s -r -p "Press any key to continue..."
+echo
 
 # set m3u8 input filename
 input="file.m3u8"

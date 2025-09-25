@@ -28,4 +28,4 @@ if /i not "%ext%"==".mp4" (
 )
 
 :: merge all ts files to mp4 file
-ffmpeg -y -allowed_extensions ALL -protocol_whitelist file -i "%~1" -c copy "%output%"
+ffmpeg -y -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%~1" -c copy "%output%"

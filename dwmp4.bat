@@ -47,7 +47,7 @@ echo Starting to merge...
 set "input=file.m3u8"
 
 :: generate ffmpeg checking log
-ffmpeg -allowed_extensions ALL -protocol_whitelist file -i "%input%" -c copy -f null NUL > ffmpeg.1.log 2>&1
+ffmpeg -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%input%" -c copy -f null NUL > ffmpeg.1.log 2>&1
 
 :: genertate fixed.m3u8 by ffmpeg.1.log
 node "%~dp0\src\fixm3u8.js" "%input%" ffmpeg.1.log
@@ -58,7 +58,7 @@ if exist "fixed.m3u8" (
 )
 
 :: merge all ts files to mp4 file
-ffmpeg -y -allowed_extensions ALL -protocol_whitelist file -i "%input%" -c copy "%output%" > ffmpeg.2.log 2>&1
+ffmpeg -y -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%input%" -c copy "%output%" > ffmpeg.2.log 2>&1
 
 :: display ouptput result
 if exist "%output%" (

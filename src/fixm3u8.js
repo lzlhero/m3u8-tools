@@ -14,7 +14,7 @@ const { readFile, writeFile } = require('fs/promises');
   try {
     var content = await readFile(fileM3U8, 'utf8');
   } catch (error) {
-    console.error(`Read "${fileM3U8}" as m3u8 file failed.`);
+    console.error(`Failed to read "${fileM3U8}".`);
     process.exit(1);
   }
   content = content.replace(/\r\n/g, '\n');
@@ -23,7 +23,7 @@ const { readFile, writeFile } = require('fs/promises');
   try {
     var log = await readFile(ffmpegLog, 'utf8');
   } catch (error) {
-    console.error(`Read "${ffmpegLog}" as ffmpeg log failed.`);
+    console.error(`Failed to read "${ffmpegLog}".`);
     process.exit(1);
   }
   log = log.replace(/\r\n/g, '\n');
@@ -66,8 +66,8 @@ const { readFile, writeFile } = require('fs/promises');
   try {
     await writeFile(fixedM3U8, content, 'utf8');
   } catch (error) {
-    console.error(`Write "${fixedM3U8}" failed.`);
+    console.error(`Failed to write "${fixedM3U8}".`);
     process.exit(1);
   }
-  console.log(`Write "${fixedM3U8}" file.`);
+  console.log(`Wrote "${fixedM3U8}" file.`);
 })();

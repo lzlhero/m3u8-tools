@@ -14,7 +14,7 @@ const { readFile, writeFile } = require('fs/promises');
   try {
     var content = await readFile(indexM3U8, 'utf8');
   } catch (error) {
-    console.error(`Read "${indexM3U8}" as m3u8 failed.`);
+    console.error(`Failed to read "${indexM3U8}".`);
     process.exit(1);
   }
 
@@ -69,10 +69,10 @@ const { readFile, writeFile } = require('fs/promises');
     try {
       await writeFile(keyFile, keyLines.join('\n'), 'utf8');
     } catch (error) {
-      console.error(`Write "${keyFile}" failed.`);
+      console.error(`Failed to write "${keyFile}".`);
       process.exit(1);
     }
-    console.log(`Write "${keyFile}" file.`);
+    console.log(`Wrote "${keyFile}" file.`);
   }
 
   // save TS url content
@@ -80,18 +80,18 @@ const { readFile, writeFile } = require('fs/promises');
   try {
     await writeFile(urlFile, urlLines.join('\n'), 'utf8');
   } catch (error) {
-    console.error(`Write "${urlFile}" failed.`);
+    console.error(`Failed to write "${urlFile}".`);
     process.exit(1);
   }
-  console.log(`Write "${urlFile}" file.`);
+  console.log(`Wrote "${urlFile}" file.`);
 
   // save file.m3u8 content
   var fileM3U8 = 'file.m3u8';
   try {
     await writeFile(fileM3U8, fileContent, 'utf8');
   } catch (error) {
-    console.error(`Write "${fileM3U8}" failed.`);
+    console.error(`Failed to write "${fileM3U8}".`);
     process.exit(1);
   }
-  console.log(`Write "${fileM3U8}" file.`);
+  console.log(`Wrote "${fileM3U8}" file.`);
 })();

@@ -60,7 +60,10 @@ if exist "fixed.m3u8" (
 :: merge all ts files to mp4 file
 ffmpeg -y -allowed_extensions ALL -protocol_whitelist file -i "%input%" -c copy "%output%" > ffmpeg.2.log 2>&1
 
-:: display mp4 filename
+:: display ouptput result
 if exist "%output%" (
-  echo Write "%output%" file.
+  echo Wrote "%output%" file.
+) else (
+  echo Failed to write "%output%" file.
+  exit /b 1
 )

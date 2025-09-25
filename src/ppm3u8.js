@@ -21,9 +21,9 @@ const { readFile, writeFile } = require('fs/promises');
   // discontinuity info
   var discontinuity = content.match(/DISCONTINUITY/ig);
   if (discontinuity) {
-    console.log(`Found ${discontinuity.length} discontinuity in "${indexM3U8}".`);
+    console.log(`ppm3u8: Found ${discontinuity.length} discontinuity in "${indexM3U8}".`);
   } else {
-    console.log(`No discontinuity found in "${indexM3U8}".`);
+    console.log(`ppm3u8: No discontinuity found in "${indexM3U8}".`);
   }
 
   // parsing and transforming TS url

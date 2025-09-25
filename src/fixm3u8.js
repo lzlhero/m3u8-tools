@@ -38,9 +38,9 @@ const { readFile, writeFile } = require('fs/promises');
 
   // discontinuity info
   if (segment.length) {
-    console.log(`Found ${segment.length} discontinuity in "${ffmpegLog}".`);
+    console.log(`fixm3u8: Found ${segment.length} discontinuity in "${ffmpegLog}".`);
   } else {
-    console.log(`No discontinuity found in "${ffmpegLog}".`);
+    console.log(`fixm3u8: No discontinuity found in "${ffmpegLog}".`);
     return;
   }
 
@@ -58,7 +58,7 @@ const { readFile, writeFile } = require('fs/promises');
     content = content.replace(reg, (i + 1 < segment.length ? '\n' : '\n#EXT-X-ENDLIST\n'));
 
     // output removed segments regular expression
-    console.log(`${1 + i / 2}: ${reg.source}`);
+    console.log(`${1 + i / 2}: ${segment[i]} - ${i + 1 < segment.length ? segment[i + 1] : '#EXT-X-ENDLIST'}`);
   }
 
   // save fixed content to file

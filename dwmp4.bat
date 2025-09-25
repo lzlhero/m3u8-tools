@@ -34,14 +34,17 @@ if exist "key.txt" (
 )
 
 :: download ts files by ts.txt
+echo.
+echo Starting to download all ts files...
 call dw -i ts.txt
 
 :: prompt user to continue
 echo.
 echo Merge all ts files to "%output%" file?
-echo Press any key to continue (Ctrl+C to exit)...
+echo Press any key to continue... (Ctrl+C to exit)
 pause >nul
 echo Starting to merge...
+echo.
 
 :: set m3u8 input filename
 set "input=file.m3u8"
@@ -61,8 +64,9 @@ if exist "fixed.m3u8" (
 ffmpeg -y -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%input%" -c copy "%output%" > ffmpeg.2.log 2>&1
 
 :: display ouptput result
+echo.
 if exist "%output%" (
-  echo Wrote "%output%" file.
+  echo Successfully wrote "%output%" file.
 ) else (
   echo Failed to write "%output%" file.
   exit /b 1

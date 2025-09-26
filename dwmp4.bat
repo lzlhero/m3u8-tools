@@ -44,7 +44,6 @@ echo Merge all ts files to "%output%" file?
 echo Press any key to continue... (Ctrl+C to exit)
 pause >nul
 echo Starting to merge...
-echo.
 
 :: set m3u8 input filename
 set "input=file.m3u8"
@@ -53,6 +52,7 @@ set "input=file.m3u8"
 ffmpeg -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%input%" -c copy -f null NUL > ffmpeg.1.log 2>&1
 
 :: genertate fixed.m3u8 by ffmpeg.1.log
+echo.
 node "%~dp0\src\fixm3u8.js" "%input%" ffmpeg.1.log
 
 :: change m3u8 input filename

@@ -26,45 +26,42 @@ const { readFile, writeFile } = require('fs/promises');
     console.log(`ppm3u8: No discontinuity found in "${indexM3U8}".`);
   }
 
-  // parsing and transforming TS url
-  var lines = content.split(/\r?\n/);
+  // extracting and modifying TS url
+  var lines = content.split(/\r?\n/), tsLines = [], m3u8Lines = [];
   var urlObject, tsFilename, urlSections, urlPathname, referPathname;
-  var urlLines = [], fileLines = [];
   for (var i = 0; i < lines.length; i++) {
     if (lines[i].trim().length > 0 && !lines[i].startsWith('#')) {
       urlObject = baseUrl ? new URL(lines[i], baseUrl) : new URL(lines[i]);
       tsFilename = urlObject.pathname.split('/').pop();
-      urlSections = urlObject.href.split('/');
-      urlSections.pop();
+      urlSections = urlObject.href.split('/'), urlSections.pop();
       urlPathname = urlSections.join('/');
 
-      // ignore TS file which is not in the same path
+      // set the first TS file path to refer path
       if (!referPathname) {
-        // set the first TS file path to refer path
         referPathname = urlPathname;
       }
 
-      // save useful url and filename
+      // ignore TS file which is not in the same path
       if (referPathname === urlPathname) {
-        urlLines.push(urlObject.href);
-        fileLines.push(tsFilename);
+        tsLines.push(urlObject.href);
+        m3u8Lines.push(tsFilename);
       }
     } else {
       // save comments
-      fileLines.push(lines[i]);
+      m3u8Lines.push(lines[i]);
     }
   }
 
-  // parsing and transforming KEY url
+  // extracting and modifying KEY url
   var keyLines = {};
-  var fileContent = fileLines.join('\n').replace(/(?:URI=")([^"]+)(?:")/g, function($0, $1) {
+  var m3u8Content = m3u8Lines.join('\n').replace(/(?:URI=")([^"]+)(?:")/g, function($0, $1) {
     var urlObject = baseUrl ? new URL($1, baseUrl) : new URL($1);
     keyLines[urlObject.href] = null;
     return `URI="${urlObject.pathname.split('/').pop()}"`;
   });
   keyLines = Object.keys(keyLines);
 
-  // save key.txt content
+  // save key.txt file
   if (keyLines.length) {
     var keyFile = 'key.txt';
     try {
@@ -76,23 +73,23 @@ const { readFile, writeFile } = require('fs/promises');
     console.log(`Wrote "${keyFile}" file.`);
   }
 
-  // save ts.txt content
+  // save ts.txt file
   var tsFile = 'ts.txt';
   try {
-    await writeFile(tsFile, urlLines.join('\n'), 'utf8');
+    await writeFile(tsFile, tsLines.join('\n'), 'utf8');
   } catch (error) {
     console.error(`Failed to write "${tsFile}".`);
     process.exit(1);
   }
   console.log(`Wrote "${tsFile}" file.`);
 
-  // save file.m3u8 content
-  var fileM3U8 = 'file.m3u8';
+  // save file.m3u8 file
+  var m3u8File = 'file.m3u8';
   try {
-    await writeFile(fileM3U8, fileContent, 'utf8');
+    await writeFile(m3u8File, m3u8Content, 'utf8');
   } catch (error) {
-    console.error(`Failed to write "${fileM3U8}".`);
+    console.error(`Failed to write "${m3u8File}".`);
     process.exit(1);
   }
-  console.log(`Wrote "${fileM3U8}" file.`);
+  console.log(`Wrote "${m3u8File}" file.`);
 })();

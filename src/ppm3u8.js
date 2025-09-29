@@ -28,13 +28,14 @@ const { readFile, writeFile } = require('fs/promises');
 
   // parsing and transforming TS url
   var lines = content.split(/\r?\n/);
-  var urlObject, urlSections, urlFilename, urlPathname, referPathname;
+  var urlObject, tsFilename, urlSections, urlPathname, referPathname;
   var urlLines = [], fileLines = [];
   for (var i = 0; i < lines.length; i++) {
     if (lines[i].trim().length > 0 && !lines[i].startsWith('#')) {
       urlObject = baseUrl ? new URL(lines[i], baseUrl) : new URL(lines[i]);
+      tsFilename = urlObject.pathname.split('/').pop();
       urlSections = urlObject.href.split('/');
-      urlFilename = urlSections.pop();
+      urlSections.pop();
       urlPathname = urlSections.join('/');
 
       // ignore TS file which is not in the same path
@@ -46,7 +47,7 @@ const { readFile, writeFile } = require('fs/promises');
       // save useful url and filename
       if (referPathname === urlPathname) {
         urlLines.push(urlObject.href);
-        fileLines.push(urlFilename);
+        fileLines.push(tsFilename);
       }
     } else {
       // save comments
@@ -75,15 +76,15 @@ const { readFile, writeFile } = require('fs/promises');
     console.log(`Wrote "${keyFile}" file.`);
   }
 
-  // save TS url content
-  var urlFile = 'ts.txt';
+  // save ts.txt content
+  var tsFile = 'ts.txt';
   try {
-    await writeFile(urlFile, urlLines.join('\n'), 'utf8');
+    await writeFile(tsFile, urlLines.join('\n'), 'utf8');
   } catch (error) {
-    console.error(`Failed to write "${urlFile}".`);
+    console.error(`Failed to write "${tsFile}".`);
     process.exit(1);
   }
-  console.log(`Wrote "${urlFile}" file.`);
+  console.log(`Wrote "${tsFile}" file.`);
 
   // save file.m3u8 content
   var fileM3U8 = 'file.m3u8';

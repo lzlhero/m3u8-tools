@@ -36,7 +36,7 @@ const crypto = require('crypto');
       url = inputUrl ? new URL(inputM3u8Lines[i], inputUrl) : new URL(inputM3u8Lines[i]);
 
       // generate new ts file name
-      filename = crypto.createHash('md5').update(url.href).digest('hex') + '.ts';
+      filename = crypto.createHash('md5').update(url.href.split('?')[0]).digest('hex') + '.ts';
 
       // modify ts item in m3u8 content
       modM3u8Lines.push(`${dir}/${filename}`);

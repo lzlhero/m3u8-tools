@@ -23,14 +23,14 @@ if /i not "%ext%"==".mp4" (
 )
 
 :: download m3u8 file
-wget -q -c -O index.m3u8 "%~1"
+wget -q -O index.m3u8 "%~1"
 
 :: generate key.txt, ts.txt, file.m3u8 by index.m3u8
 node "%~dp0\src\ppm3u8.js" index.m3u8 "%~1"
 
 :: download key file by key.txt
 if exist "key.txt" (
-  wget -q -c -i key.txt
+  wget -q -i key.txt
 )
 
 :: download ts files by ts.txt
@@ -53,6 +53,9 @@ ffmpeg -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%input
 
 :: genertate fixed.m3u8 by ffmpeg.1.log
 echo.
+if exist "fixed.m3u8" (
+  del /f /q "fixed.m3u8"
+)
 node "%~dp0\src\fixm3u8.js" "%input%" ffmpeg.1.log
 
 :: change m3u8 input filename

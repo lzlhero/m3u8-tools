@@ -3,5 +3,5 @@
 node "$(dirname "$0")/src/ppm3u8.js" "$@"
 
 if [ -f "key.txt" ]; then
-  wget -q -c -i key.txt
+  wget -q -i key.txt
 fi

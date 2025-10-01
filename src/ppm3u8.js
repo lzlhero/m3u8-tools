@@ -1,4 +1,5 @@
 const { readFile, writeFile } = require('fs/promises');
+const crypto = require('crypto');
 
 (async () => {
 
@@ -29,25 +30,23 @@ const { readFile, writeFile } = require('fs/promises');
   // modify m3u8 content, extract ts list
   var inputM3u8Lines = inputM3u8Content.split(/\r?\n/);
   var modM3u8Lines = [], tsList = [];
-  var url, sections, hostPathname, srcPathname;
+  var url, dir = 'ts', filename;
   for (var i = 0; i < inputM3u8Lines.length; i++) {
     if (inputM3u8Lines[i].trim().length > 0 && !inputM3u8Lines[i].startsWith('#')) {
       url = inputUrl ? new URL(inputM3u8Lines[i], inputUrl) : new URL(inputM3u8Lines[i]);
-      sections = url.href.split('/'), sections.pop();
-      hostPathname = sections.join('/');
 
-      // init refer pathname value
-      if (!srcPathname) {
-        srcPathname = hostPathname;
-      }
+      // generate new ts file name
+      filename = crypto.createHash('md5').update(url.href).digest('hex') + '.ts';
 
-      // save with which have same url source
-      if (hostPathname === srcPathname) {
-        modM3u8Lines.push(url.pathname.split('/').pop());
-        tsList.push(url.href);
-      }
+      // modify ts item in m3u8 content
+      modM3u8Lines.push(`${dir}/${filename}`);
+
+      // generate ts item in ts list
+      tsList.push(url.href);
+      tsList.push(`  dir=${dir}`);
+      tsList.push(`  out=${filename}`);
     } else {
-      // save m3u8 comments
+      // copy m3u8 comment
       modM3u8Lines.push(inputM3u8Lines[i]);
     }
   }

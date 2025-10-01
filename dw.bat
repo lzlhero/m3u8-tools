@@ -1,1 +1,1 @@
-@wget -c %*
+@aria2c %*

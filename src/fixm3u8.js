@@ -3,71 +3,73 @@ const { readFile, writeFile } = require('fs/promises');
 (async () => {
 
   // get input file and ffmpeg log file name
-  var fileM3U8 = process.argv[2];
-  var ffmpegLog = process.argv[3];
-  if (!fileM3U8 || !ffmpegLog) {
+  var inputM3u8File = process.argv[2];
+  var logFile = process.argv[3];
+  if (!inputM3u8File || !logFile) {
     console.log(`Usage: fixm3u8 file.m3u8 ffmpeg.log`);
     return;
   }
 
   // get input file content
   try {
-    var content = await readFile(fileM3U8, 'utf8');
+    var m3u8Content = await readFile(inputM3u8File, 'utf8');
   } catch (error) {
-    console.error(`Failed to read "${fileM3U8}".`);
+    console.error(`Failed to read "${inputM3u8File}".`);
     process.exit(1);
   }
-  content = content.replace(/\r\n/g, '\n');
+  m3u8Content = m3u8Content.replace(/\r\n/g, '\n');
 
   // get ffmpeg log content
   try {
-    var log = await readFile(ffmpegLog, 'utf8');
+    var logContent = await readFile(logFile, 'utf8');
   } catch (error) {
-    console.error(`Failed to read "${ffmpegLog}".`);
+    console.error(`Failed to read "${logFile}".`);
     process.exit(1);
   }
-  log = log.replace(/\r\n/g, '\n');
+  logContent = logContent.replace(/\r\n/g, '\n');
 
-  // find discontinuity segments from log
+  // parse discontinuity segments from ffmpeg log
   var regex = /\n\[[^'\n]+'([^'\n]+)' for reading\n\[[^'\n]+'([^'\n]+)' for reading\n\[[^']+discontinuity/g;
-  var segment = [], i = 1;
-  while ((match = regex.exec(log)) !== null) {
-    segment.push(match[1 + i % 2]);
+  var result, segments = [], i = 1;
+  while ((result = regex.exec(logContent)) !== null) {
+    segments.push(result[1 + i % 2]);
     i++;
   }
 
-  // discontinuity info
-  if (segment.length) {
-    console.log(`fixm3u8: Found ${segment.length} discontinuity in "${ffmpegLog}".`);
+  // display discontinuity info
+  if (segments.length) {
+    console.log(`fixm3u8: Found ${segments.length} discontinuity in "${logFile}".`);
   } else {
-    console.log(`fixm3u8: No discontinuity found in "${ffmpegLog}".`);
+    console.log(`fixm3u8: No discontinuity found in "${logFile}".`);
     return;
   }
 
-  // remove advertisement segments from m3u8 content
-  var strReg, reg;
-  for (var i = 0; i < segment.length; i = i + 2) {
-    // build reg string
-    strReg = `\n${segment[i].replace(/\./g, '\\\.')}`;
-    strReg += i + 1 < segment.length ? `\n(?:.*\n)*?${segment[i + 1].replace(/\./g, '\\\.')}\n` : '\n(?:.*\n)*';
+  // remove all discontinuity segments from m3u8 content
+  var strReg, replaceText;
+  for (var i = 0; i < segments.length; i = i + 2) {
+    // build replacement reg string
+    strReg = `\n${segments[i].replace(/\./g, '\\\.')}\n(?:.*\n)*`;
+    if (i + 1 < segments.length) {
+        strReg += `?${segments[i + 1].replace(/\./g, '\\\.')}\n`;
+        replaceText = '\n';
+    } else {
+        replaceText = '\n#EXT-X-ENDLIST\n';
+    }
 
-    // create reg object
-    reg = new RegExp(strReg);
+    // remove discontinuity ts
+    m3u8Content = m3u8Content.replace(new RegExp(strReg), replaceText);
 
-    // remove segments
-    content = content.replace(reg, (i + 1 < segment.length ? '\n' : '\n#EXT-X-ENDLIST\n'));
-
-    // output removed segments regular expression
-    console.log(`${1 + i / 2}: ${segment[i]} - ${i + 1 < segment.length ? segment[i + 1] : '#EXT-X-ENDLIST'}`);
+    // display removed segments info
+    console.log(`${1 + i / 2}: ${segments[i]} - ${i + 1 < segments.length ? segments[i + 1] : '#EXT-X-ENDLIST'}`);
   }
 
-  // save fixed content to file
-  var fixedM3U8 = 'fixed.m3u8';
+  // save fixed.m3u8 file
+  var fixedM3u8File = 'fixed.m3u8';
   try {
-    await writeFile(fixedM3U8, content, 'utf8');
+    await writeFile(fixedM3u8File, m3u8Content, 'utf8');
   } catch (error) {
-    console.error(`Failed to write "${fixedM3U8}".`);
+    console.error(`Failed to write "${fixedM3u8File}".`);
     process.exit(1);
   }
-  console.log(`Wrote "${fixedM3U8}" file.`);
+  console.log(`Wrote "${fixedM3u8File}" file.`);
 })();

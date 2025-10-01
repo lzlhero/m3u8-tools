@@ -30,7 +30,7 @@ const crypto = require('crypto');
   // modify m3u8 content, extract ts list
   var inputM3u8Lines = inputM3u8Content.split(/\r?\n/);
   var modM3u8Lines = [], tsList = [];
-  var url, dir = 'ts', filename;
+  var url, dir = 'cache', filename;
   for (var i = 0; i < inputM3u8Lines.length; i++) {
     if (inputM3u8Lines[i].trim().length > 0 && !inputM3u8Lines[i].startsWith('#')) {
       url = inputUrl ? new URL(inputM3u8Lines[i], inputUrl) : new URL(inputM3u8Lines[i]);

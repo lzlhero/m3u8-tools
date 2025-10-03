@@ -25,35 +25,26 @@ if /i not "%ext%"==".mp4" (
 :: download m3u8 file
 wget -q -O index.m3u8 "%~1"
 
-:: remove last key.txt
-if exist "key.txt" (
-  del /f /q "key.txt"
-)
-
-:: generate key.txt, ts.txt, file.m3u8 by index.m3u8
+:: generate url.txt, file.m3u8 by index.m3u8
 node "%~dp0\src\ppm3u8.js" index.m3u8 "%~1"
 
-:: download key file by key.txt
-if exist "key.txt" (
-  wget -q -i key.txt
-)
-
-:: download ts files by ts.txt
+:: download related files by url.txt
 echo.
-echo Starting to download all ts files...
-call dw -i ts.txt
+echo Starting to download all related files...
+call dw -i url.txt
 
 :: prompt user to continue
 echo.
 echo Merge all ts files to "%output%" file?
 echo Press any key to continue... (Ctrl+C to exit)
 pause >nul
-echo Starting to merge...
 
 :: set m3u8 input filename
 set "input=file.m3u8"
 
 :: generate ffmpeg checking log
+echo.
+echo Generating ffmpeg checking log first...
 ffmpeg -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%input%" -c copy -f null NUL > ffmpeg.1.log 2>&1
 
 :: remove last fixed.m3u8
@@ -71,6 +62,8 @@ if exist "fixed.m3u8" (
 )
 
 :: merge all ts files to mp4 file
+echo.
+echo Starting to merge...
 ffmpeg -y -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%input%" -c copy "%output%" > ffmpeg.2.log 2>&1
 
 :: display ouptput result

@@ -1,11 +1,2 @@
 #!/bin/bash
-
-if [ -f key.txt ]; then
-  rm key.txt
-fi
-
 node "$(dirname "$0")/src/ppm3u8.js" "$@"
-
-if [ -f "key.txt" ]; then
-  wget -q -i key.txt
-fi

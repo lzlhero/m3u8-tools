@@ -38,9 +38,9 @@ const { readFile, writeFile } = require('fs/promises');
 
   // display discontinuity info
   if (segments.length) {
-    console.log(`fixm3u8: Found ${segments.length} discontinuity in "${logFile}".`);
+    console.log(`fixm3u8: Found ${segments.length} "discontinuity" keyword in "${logFile}".`);
   } else {
-    console.log(`fixm3u8: No discontinuity found in "${logFile}".`);
+    console.log(`fixm3u8: No "discontinuity" keyword in "${logFile}".`);
     return;
   }
 
@@ -64,12 +64,12 @@ const { readFile, writeFile } = require('fs/promises');
   }
 
   // save fixed.m3u8 file
-  var fixedM3u8File = 'fixed.m3u8';
+  var outputM3u8File = 'fixed.m3u8';
   try {
-    await writeFile(fixedM3u8File, m3u8Content, 'utf8');
+    await writeFile(outputM3u8File, m3u8Content, 'utf8');
   } catch (error) {
-    console.error(`Failed to write "${fixedM3u8File}".`);
+    console.error(`Failed to write "${outputM3u8File}".`);
     process.exit(1);
   }
-  console.log(`Wrote "${fixedM3u8File}" file.`);
+  console.log(`Wrote "${outputM3u8File}" file.`);
 })();

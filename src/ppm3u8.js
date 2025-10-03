@@ -40,14 +40,14 @@ const { readFile, writeFile } = require('fs/promises');
     var url = inputUrl ? new URL($1, inputUrl) : new URL($1);
 
     if (!keys[url.href]) {
-      // generate new key file name
+      // generate new crypto key file name
       keys[url.href] = createHash('md5').update(url.href.split('?')[0]).digest('hex') + '.key';
     }
 
     return `URI="${dir}/${keys[url.href]}"`;
   });
 
-  // copy crypto key to url file
+  // copy crypto key url to url file
   for (let href in keys) {
     urlFileLines.push(href);
     urlFileLines.push(`  dir=${dir}`);
@@ -68,7 +68,7 @@ const { readFile, writeFile } = require('fs/promises');
       // generate new ts file name
       filename = createHash('md5').update(url.href.split('?')[0]).digest('hex') + '.ts';
 
-      // coppy ts url to url file
+      // copy ts url to url file
       urlFileLines.push(url.href);
       urlFileLines.push(`  dir=${dir}`);
       urlFileLines.push(`  out=${filename}`);

@@ -56,7 +56,7 @@ const { readFile, writeFile } = require('fs/promises');
 
   // extract ts url, modify m3u8 content
   var m3u8Lines = m3u8Content.split(/\r?\n/);
-  var url, filename, m3u8Line;
+  var m3u8Line, url, filename;
   for (var i = 0; i < m3u8Lines.length; i++) {
     m3u8Line = m3u8Lines[i].trim();
 

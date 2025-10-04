@@ -37,13 +37,13 @@ call dw -i url.txt
 echo.
 echo Merge all ts files to "%output%" file?
 echo Press any key to continue... (Ctrl+C to exit)
+echo.
 pause >nul
 
 :: set m3u8 input filename
 set "input=file.m3u8"
 
 :: generate ffmpeg checking log
-echo.
 echo Generating ffmpeg checking log first...
 ffmpeg -allowed_extensions ALL -protocol_whitelist "file,crypto,data" -i "%input%" -c copy -f null NUL > ffmpeg.1.log 2>&1
 

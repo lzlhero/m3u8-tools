@@ -11,6 +11,8 @@ const { readFile, writeFile } = require('fs/promises');
     return;
   }
 
+  console.log('Preprocess m3u8 Results:');
+
   // get input file content
   try {
     var m3u8Content = await readFile(inputM3u8File, 'utf8');
@@ -22,9 +24,9 @@ const { readFile, writeFile } = require('fs/promises');
   // display discontinuity info
   var matches = m3u8Content.match(/DISCONTINUITY/ig);
   if (matches) {
-    console.log(`ppm3u8: Found ${matches.length} "DISCONTINUITY" keyword in "${inputM3u8File}".`);
+    console.log(`Found ${matches.length} "DISCONTINUITY" keyword in "${inputM3u8File}".`);
   } else {
-    console.log(`ppm3u8: No "DISCONTINUITY" keyword in "${inputM3u8File}".`);
+    console.log(`No "DISCONTINUITY" keyword in "${inputM3u8File}".`);
   }
 
   // define download dir

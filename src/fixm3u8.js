@@ -10,6 +10,8 @@ const { readFile, writeFile } = require('fs/promises');
     return;
   }
 
+  console.log('Fix m3u8 Results:');
+
   // get input file content
   try {
     var m3u8Content = await readFile(inputM3u8File, 'utf8');
@@ -38,9 +40,9 @@ const { readFile, writeFile } = require('fs/promises');
 
   // display discontinuity info
   if (segments.length) {
-    console.log(`fixm3u8: Found ${segments.length} "discontinuity" keyword in "${logFile}".`);
+    console.log(`Found ${segments.length} "discontinuity" keyword in "${logFile}".`);
   } else {
-    console.log(`fixm3u8: No "discontinuity" keyword in "${logFile}".`);
+    console.log(`No "discontinuity" keyword in "${logFile}".`);
     return;
   }
 

@@ -31,7 +31,7 @@ const { readFile, writeFile } = require('fs/promises');
   logContent = logContent.replace(/\r\n/g, '\n');
 
   // parse discontinuity segments from ffmpeg log
-  var regex = /\n[^\n']+'(?:.*:)?([^\n']+)' for reading\n[^']+'(?:.*:)?([^\n']+)' for reading\n[^']+discontinuity/g;
+  var regex = /\n[^\n']+'(?:crypto:)?([^\n']+)' for reading\n[^']+'(?:crypto:)?([^\n']+)' for reading\n[^']+discontinuity/g;
   var result, segments = [], i = 1;
   while ((result = regex.exec(logContent)) !== null) {
     segments.push(result[1 + i % 2]);

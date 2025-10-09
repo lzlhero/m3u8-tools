@@ -3,7 +3,7 @@
 :: display usage information
 if "%~1"=="" (
   echo Usage: %~nx0 m3u8-url [output.mp4]
-  echo Based on: aria2, node and ffmpeg. They must be installed and configured in the PATH environment variable.
+  echo Based on: aria2c, node and ffmpeg. They must be installed and configured in the PATH environment variable.
   exit /b 1
 )
 

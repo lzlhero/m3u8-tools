@@ -24,10 +24,9 @@ if /i not "%ext%"==".mp4" (
 )
 
 :: download m3u8 file
-aria2c -o index.m3u8 "%~1"
+aria2c -q -o index.m3u8 "%~1"
 
 :: generate url.txt, file.m3u8 by index.m3u8
-echo.
 node "%~dp0\src\ppm3u8.js" index.m3u8 "%~1"
 
 :: download related files by url.txt

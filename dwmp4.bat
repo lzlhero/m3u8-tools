@@ -3,6 +3,7 @@
 :: display usage information
 if "%~1"=="" (
   echo Usage: %~nx0 m3u8-url [output.mp4]
+  echo Based on aria2, node, ffmpeg, they must have been deployed and configured to PATH.
   exit /b 1
 )
 
@@ -23,15 +24,16 @@ if /i not "%ext%"==".mp4" (
 )
 
 :: download m3u8 file
-wget -q -O index.m3u8 "%~1"
+aria2c -o index.m3u8 "%~1"
 
 :: generate url.txt, file.m3u8 by index.m3u8
+echo.
 node "%~dp0\src\ppm3u8.js" index.m3u8 "%~1"
 
 :: download related files by url.txt
 echo.
 echo Starting to download all related files...
-call dw -i url.txt
+aria2c -i url.txt
 
 :: prompt user to continue
 echo.

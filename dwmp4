@@ -3,6 +3,7 @@
 # display usage information
 if [ -z "$1" ]; then
   echo "Usage: $(basename "$0") m3u8-url [output.mp4]"
+  echo "Based on aria2, node, ffmpeg, they must have been deployed and configured to PATH."
   exit 1
 fi
 
@@ -21,7 +22,7 @@ if [ "$ext" != ".mp4" ]; then
 fi
 
 # download m3u8 file
-wget -q -O index.m3u8 "$1"
+aria2c -o index.m3u8 "$1"
 
 # generate url.txt, file.m3u8 by index.m3u8
 node "$(dirname "$0")/src/ppm3u8.js" index.m3u8 "$1"
@@ -29,7 +30,7 @@ node "$(dirname "$0")/src/ppm3u8.js" index.m3u8 "$1"
 # download related files by url.txt
 echo
 echo "Starting to download all related files..."
-dw -i url.txt
+aria2c -i url.txt
 
 # prompt user to continue
 echo

@@ -1,0 +1,1 @@
+@aria2c --max-connection-per-server=1 --split=1 %*

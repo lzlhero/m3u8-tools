@@ -24,7 +24,7 @@ if /i not "%ext%"==".mp4" (
 )
 
 :: download m3u8 file
-aria2c -q -o index.m3u8 "%~1"
+aria2c --allow-overwrite=true --continue=false --split=1 -q -o index.m3u8 "%~1"
 
 :: generate url.txt, file.m3u8 by index.m3u8
 node "%~dp0\src\ppm3u8.js" index.m3u8 "%~1"

@@ -32,8 +32,8 @@ const { readFile, writeFile } = require('fs/promises');
   // define download dir
   const dir = 'cache';
 
-  // define url file lines
-  var urlFileLines = [];
+  // define list file lines
+  var listFileLines = [];
 
   // extract crypto key url, modify m3u8 content
   var keys = {};
@@ -49,11 +49,11 @@ const { readFile, writeFile } = require('fs/promises');
     return `URI="${dir}/${keys[url.href]}"`;
   });
 
-  // copy crypto key url to url file
+  // copy crypto key url to aria2c list file
   for (let href in keys) {
-    urlFileLines.push(href);
-    urlFileLines.push(`  dir=${dir}`);
-    urlFileLines.push(`  out=${keys[href]}`);
+    listFileLines.push(href);
+    listFileLines.push(`  dir=${dir}`);
+    listFileLines.push(`  out=${keys[href]}`);
   }
 
   // extract ts url, modify m3u8 content
@@ -70,25 +70,25 @@ const { readFile, writeFile } = require('fs/promises');
       // generate new ts file name
       filename = createHash('md5').update(url.href.split('?')[0]).digest('hex') + '.ts';
 
-      // copy ts url to url file
-      urlFileLines.push(url.href);
-      urlFileLines.push(`  dir=${dir}`);
-      urlFileLines.push(`  out=${filename}`);
+      // copy ts url to aria2c list file
+      listFileLines.push(url.href);
+      listFileLines.push(`  dir=${dir}`);
+      listFileLines.push(`  out=${filename}`);
 
       // modify ts line content
       m3u8Lines[i] = `${dir}/${filename}`;
     }
   }
 
-  // save url.txt file
-  var urlFile = 'url.txt';
+  // save list.txt file
+  var listFile = 'list.txt';
   try {
-    await writeFile(urlFile, urlFileLines.join('\n'), 'utf8');
+    await writeFile(listFile, listFileLines.join('\n'), 'utf8');
   } catch (error) {
-    console.error(`Failed to write "${urlFile}".`);
+    console.error(`Failed to write "${listFile}".`);
     process.exit(1);
   }
-  console.log(`Wrote "${urlFile}" file.`);
+  console.log(`Wrote "${listFile}" file.`);
 
   // save file.m3u8 file
   var outputM3u8File = 'file.m3u8';

@@ -27,6 +27,7 @@ if /i not "%ext%"==".mp4" (
 aria2c --allow-overwrite=true --continue=false --split=1 -q -o index.m3u8 "%~1"
 
 :: generate list.txt, file.m3u8 by index.m3u8
+echo.
 node "%~dp0\src\ppm3u8.js" index.m3u8 "%~1"
 
 :: download related files by list.txt

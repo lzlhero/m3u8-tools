@@ -35,7 +35,9 @@ echo Starting to download all related files...
 aria2c -i list.txt
 
 :: prompt user to continue
-if not "%3"=="-y" (
+if "%3"=="-y" (
+  echo.
+) else (
   echo.
   echo Merge all ts files to "%output%" file?
   echo Press any key to continue... ^(Ctrl+C to exit^)

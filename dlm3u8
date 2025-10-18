@@ -33,7 +33,9 @@ echo "Starting to download all related files..."
 aria2c -i list.txt
 
 # prompt user to continue
-if [[ "$3" != "-y" ]]; then
+if [[ "$3" == "-y" ]]; then
+  echo
+else
   echo
   echo "Merge all ts files to \"$output\" file?"
   echo "Press any key to continue... (Ctrl+C to exit)"

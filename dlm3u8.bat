@@ -2,7 +2,7 @@
 
 :: display usage information
 if "%~1"=="" (
-  echo Usage: %~nx0 m3u8-url [output.mp4]
+  echo Usage: %~nx0 m3u8-url [output.mp4] [-y]
   echo Based on: aria2c, node and ffmpeg. They must be installed and configured in the PATH environment variable.
   exit /b 1
 )
@@ -35,11 +35,13 @@ echo Starting to download all related files...
 aria2c -i list.txt
 
 :: prompt user to continue
-echo.
-echo Merge all ts files to "%output%" file?
-echo Press any key to continue... (Ctrl+C to exit)
-echo.
-pause >nul
+if not "%3"=="-y" (
+  echo.
+  echo Merge all ts files to "%output%" file?
+  echo Press any key to continue... ^(Ctrl+C to exit^)
+  echo.
+  pause >nul
+)
 
 :: set m3u8 input filename
 set "input=file.m3u8"
